@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#060911">
+<title>Edexcel GCSE History · Medicine &amp; Western Front</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;margin:0;overscroll-behavior:none}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       background:#060911;color:#e9edf9;overflow:hidden}
+  #app{
+    --accent:#34d399;--accent2:#6ee7b7;--glow:rgba(52,211,153,.4);--bg1:rgba(52,211,153,.09);
+    height:100dvh;display:flex;flex-direction:column;
+    background:
+      radial-gradient(760px 480px at 10% -8%,var(--bg1),transparent 62%),
+      radial-gradient(680px 420px at 102% 108%,var(--bg1),transparent 62%),
+      #060911;
+  }
+  #app[data-s="wf"]{--accent:#f87171;--accent2:#fca5a5;--glow:rgba(248,113,113,.4);--bg1:rgba(248,113,113,.09)}
+
+  #stats{
+    display:flex;gap:12px;align-items:center;padding:6px 14px;
+    background:#0d1424;border-bottom:1px solid rgba(255,255,255,.06);
+    font-size:11.5px;color:#8b96b4;font-variant-numeric:tabular-nums;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    flex-wrap:wrap;
+  }
+  #stats .v{color:#a5b4fc;font-weight:700}
+  #stats .c{color:#f9a8d4;font-weight:700}
+  #stats .r{color:#86efac;font-weight:700}
+  #stats button{background:#1e293b;color:#cbd5e1;border:1px solid #334155;
+    border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;font-family:inherit}
+  #stats button:hover{background:#334155}
+
+  .top{display:flex;align-items:center;gap:14px;padding:10px 16px;flex-shrink:0;
+       border-bottom:1px solid rgba(255,255,255,.07);background:#0a0f1c;z-index:30}
+  .brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .logo{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:18px;
+        background:linear-gradient(135deg,var(--accent),var(--accent2));
+        box-shadow:0 0 18px var(--glow);flex-shrink:0}
+  .brand h1{font-size:14.5px;margin:0;white-space:nowrap}
+  .brand p{margin:1px 0 0;font-size:11px;color:#8b96b4;white-space:nowrap}
+  .tabs{display:flex;gap:6px;margin-left:auto;background:rgba(255,255,255,.05);
+        padding:4px;border-radius:12px;border:1px solid rgba(255,255,255,.07)}
+  .tab{border:0;background:transparent;color:#98a3c0;font:inherit;font-size:12.5px;font-weight:600;
+       padding:8px 12px;border-radius:9px;cursor:pointer;white-space:nowrap;
+       display:flex;align-items:center;gap:6px}
+  .tab[aria-selected="true"]{color:#04070f;
+       background:linear-gradient(135deg,var(--accent),var(--accent2));
+       box-shadow:0 5px 16px -6px var(--glow)}
+  .ibtn{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#cfd7ea;
+        width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:16px;
+        display:none;place-items:center;flex-shrink:0}
+  .body{flex:1;display:flex;min-height:0}
+  .side{width:250px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.07);
+        overflow-y:auto;padding:12px 10px 40px;background:#080d18;
+        scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent}
+  .side::-webkit-scrollbar{width:7px}
+  .side::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:8px}
+  .sidehead{display:none}
+  .utitle{font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:#5f6b8b;
+          font-weight:700;margin:14px 8px 6px}
+  .topic{width:100%;display:flex;align-items:center;gap:9px;text-align:left;
+         border:1px solid transparent;background:transparent;color:#b9c3dc;font:inherit;
+         font-size:12.5px;padding:8px 9px;border-radius:9px;cursor:pointer}
+  .topic:hover{background:rgba(255,255,255,.055);color:#fff}
+  .topic[aria-current="true"]{background:rgba(255,255,255,.09);
+         border-color:rgba(255,255,255,.13);color:#fff;font-weight:600}
+  .topic .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .topic .ct{font-size:10.5px;color:#6b769a;font-variant-numeric:tabular-nums}
+  .ring{width:15px;height:15px;border-radius:50%;flex-shrink:0;position:relative}
+  .ring::after{content:"";position:absolute;inset:3.5px;border-radius:50%;background:#080d18}
+
+  .stage{flex:1;min-width:0;display:flex;flex-direction:column;padding:14px 22px 16px;gap:10px}
+  .shead{display:flex;align-items:center;gap:14px;flex-wrap:wrap;flex-shrink:0}
+  .crumb{font-size:12.5px;color:#7c88a8;font-weight:600}
+  .crumb b{color:var(--accent2)}
+  .pwrap{margin-left:auto;display:flex;align-items:center;gap:9px}
+  .ptrack{width:150px;height:6px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden}
+  .pfill{height:100%;width:0;border-radius:99px;
+         background:linear-gradient(90deg,var(--accent),var(--accent2));
+         transition:width .3s;box-shadow:0 0 10px var(--glow)}
+  .ptext{font-size:11.5px;color:#7c88a8;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  .cardwrap{flex:1;min-height:150px;position:relative}
+  .card{position:absolute;inset:0;perspective:1600px;cursor:pointer}
+  .cin{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+       transition:transform .3s cubic-bezier(.25,.85,.3,1)}
+  .card.flip .cin{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+        border-radius:18px;display:flex;overflow-y:auto;
+        border:1px solid rgba(255,255,255,.09);
+        background:linear-gradient(160deg,#161d32,#0d1221);
+        box-shadow:0 22px 50px -28px rgba(0,0,0,.9)}
+  .face::-webkit-scrollbar{width:7px}
+  .face::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:8px}
+  .front{border-top:3px solid var(--accent)}
+  .back{transform:rotateY(180deg);border-top:3px solid var(--accent2);
+        background:linear-gradient(160deg,#1a2238,#0e1425)}
+  .fin{margin:auto;padding:26px 34px;width:100%;text-align:center}
+  .badge{display:inline-block;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+         font-weight:800;color:var(--accent2);background:rgba(255,255,255,.06);
+         padding:4px 11px;border-radius:99px;margin-bottom:16px}
+  .q{font-size:clamp(16px,1.9vw,23px);line-height:1.45;font-weight:600;margin:0}
+  .a{font-size:clamp(13px,1.25vw,16.5px);line-height:1.75;margin:0;color:#dbe3f7;text-align:left}
+  .a strong,.q strong{color:var(--accent2);font-weight:700}
+  .hint{display:block;margin-top:20px;font-size:11px;color:#5d688a}
+  kbd{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);
+      border-radius:4px;padding:1px 5px;font-size:10px;font-family:inherit}
+
+  .row{display:flex;gap:8px;flex-shrink:0}
+  .btn{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#dbe3f7;
+       font:inherit;font-size:13px;font-weight:600;padding:11px 16px;border-radius:11px;
+       cursor:pointer;flex:1;transition:background .12s,color .12s,border-color .12s}
+  .btn:hover{background:rgba(255,255,255,.1)}
+  .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#05080f;
+       border-color:transparent;box-shadow:0 8px 20px -10px var(--glow)}
+  .mark.rev{border-color:rgba(244,114,182,.3);color:#f9a8d4}
+  .mark.got{border-color:rgba(34,197,94,.3);color:#86efac}
+  .mark.got.on{background:#22c55e !important;color:#04240e !important;border-color:#22c55e !important;
+       box-shadow:0 0 22px -3px rgba(34,197,94,.85) !important;font-weight:800 !important}
+  .mark.rev.on{background:#f472b6 !important;color:#3a0a24 !important;border-color:#f472b6 !important;
+       box-shadow:0 0 22px -3px rgba(244,114,182,.85) !important;font-weight:800 !important}
+
+  .bar{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .cnt{font-size:11.5px;color:#7c88a8;font-variant-numeric:tabular-nums;margin-right:auto}
+  .tiny{flex:0 0 auto;padding:7px 12px;font-size:11.5px;border-radius:9px}
+  .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;
+         color:#7c88a8;border:1px dashed rgba(255,255,255,.14);border-radius:18px;padding:30px}
+  .empty h3{margin:0 0 6px;color:#cfd7ea;font-size:17px}
+  .empty p{margin:0;font-size:13px;line-height:1.6}
+  .bd{display:none}
+  @media(max-width:880px){
+    .brand p{display:none}
+    .ibtn{display:grid}
+    .top{flex-wrap:wrap;gap:8px;padding:10px 12px}
+    .tabs{order:3;width:100%;margin-left:0;overflow-x:auto}
+    .tab{flex:1;justify-content:center;padding:7px 8px;font-size:11.5px}
+    .side{position:fixed;top:0;left:0;bottom:0;z-index:60;width:280px;background:#0a0f1c;
+          transform:translateX(-102%);transition:transform .25s cubic-bezier(.2,.8,.2,1);
+          box-shadow:24px 0 50px -18px rgba(0,0,0,.9)}
+    .side.open{transform:none}
+    .sidehead{display:flex;align-items:center;justify-content:space-between;
+              padding:0 4px 8px;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .sidehead h2{font-size:13.5px;margin:8px 0}
+    .sidehead .ibtn{display:grid;width:32px;height:32px}
+    .bd{display:block;position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:55;
+        opacity:0;pointer-events:none;transition:opacity .22s}
+    .bd.on{opacity:1;pointer-events:auto}
+    .stage{padding:12px}
+    .fin{padding:20px 18px}
+  }
+</style>
+</head>
+<body>
+<div id="app" data-s="med">
+
+  <div id="stats">
+    <span>v6</span>
+    <span>Clicks <span class="v" id="statClicks">0</span></span>
+    <span>Known <span class="r" id="statKnown">0</span></span>
+    <span>Review <span class="c" id="statReview">0</span></span>
+    <span>Deck <span class="v" id="statDeck">0</span></span>
+    <span>Idx <span class="v" id="statIndex">0</span></span>
+    <span>Card <span class="v" id="statCard">-</span></span>
+    <span>State <span class="v" id="statState">-</span></span>
+    <button id="clearData" type="button">Clear save</button>
+  </div>
+
+  <header class="top">
+    <div class="brand">
+      <div class="logo" id="logo">🩺</div>
+      <div>
+        <h1>Paper 1 Flashcards</h1>
+        <p>Edexcel GCSE History · Medicine &amp; Western Front</p>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs"></nav>
+    <button class="ibtn" id="menuBtn" aria-label="Topics">☰</button>
+  </header>
+
+  <div class="body">
+    <aside class="side" id="side">
+      <div class="sidehead">
+        <h2>Topics</h2>
+        <button class="ibtn" id="closeBtn" aria-label="Close">✕</button>
+      </div>
+      <div id="topics"></div>
+    </aside>
+    <div class="bd" id="bd"></div>
+
+    <main class="stage">
+      <div class="shead">
+        <div class="crumb" id="crumb"></div>
+        <div class="pwrap">
+          <div class="ptrack"><div class="pfill" id="pfill"></div></div>
+          <span class="ptext" id="ptext">0 / 0</span>
+        </div>
+      </div>
+
+      <div class="cardwrap" id="cardwrap">
+        <div class="card" id="card">
+          <div class="cin" id="cin">
+            <div class="face front">
+              <div class="fin">
+                <span class="badge" id="bf">Question</span>
+                <p class="q" id="qt"></p>
+                <span class="hint">Tap the card or press <kbd>Space</kbd> to flip</span>
+              </div>
+            </div>
+            <div class="face back">
+              <div class="fin">
+                <span class="badge" id="bb">Answer</span>
+                <p class="a" id="at"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <button class="btn" id="prev" type="button">← Prev</button>
+        <button class="btn primary" id="flip" type="button">Flip</button>
+        <button class="btn" id="next" type="button">Next →</button>
+      </div>
+
+      <div class="row">
+        <button class="btn mark rev" id="revBtn" type="button">🔁 Need review</button>
+        <button class="btn mark got" id="gotBtn" type="button">✅ Got it</button>
+      </div>
+
+      <div class="bar">
+        <span class="cnt" id="cnt">1 / 1</span>
+        <button class="btn tiny" id="shuf" type="button">🔀 Shuffle</button>
+        <button class="btn tiny" id="reset" type="button">↺ Reset</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   DATA
+   ========================================================= */
+var SECTIONS = [
+{ id:"med", title:"Medicine in Britain", emoji:"🩺", units:[
+  { name:"Medieval Medicine c1250–c1500", groups:[
+    { name:"Causes of Disease", cards:[
+      ["What was the Theory of the Four Humours?","The belief the body contained **four fluids** — **blood, phlegm, yellow bile, black bile**. Illness was caused by an **imbalance** of these humours."],
+      ["Who developed the Theory of the Four Humours?","**Hippocrates** (c460–c370 BC), a Greek physician, first developed it. **Galen** (c129–c216 AD) later developed it further."],
+      ["What was the miasma theory?","The belief that disease was caused by **bad air** — foul smells from rotting matter, sewage, and swamps were thought to carry illness."],
+      ["What was the supernatural explanation for disease?","The belief that disease was a **punishment from God** for sin, or caused by **evil spirits**, **astrology**, or **witchcraft**."],
+      ["Why did the Church support the Four Humours theory?","Because it **fit with the Christian idea** that God created a balanced universe — the Church preserved Galen's works and **banned dissection**."],
+      ["What did people believe caused the Black Death?","Most believed it was **God's punishment**, or that it came from **miasma** — some blamed **Jews** or **astrology**."]
+    ]},
+    { name:"Treatments and Prevention", cards:[
+      ["What was bloodletting?","Removing blood to **balance the humours** — done by **cupping**, **leeching**, or **cutting a vein**."],
+      ["What was purging?","Using **herbs or laxatives** to cleanse the body of excess humours — often caused vomiting or diarrhoea."],
+      ["What was the Theory of Opposites?","Treating an illness with its **opposite** — e.g. a fever (hot) was treated with **cold baths**."],
+      ["What were common herbal remedies?","**Theriaca**, **mithridatum**, **opium** for pain, and **willow bark** for fever."],
+      ["What was the 'Regimen Sanitatis'?","A **set of rules for healthy living** — diet, exercise, sleep, and cleanliness — based on the Four Humours."],
+      ["How did people try to prevent the Black Death?","They **prayed**, **fasted**, went on **pilgrimages**, **burned herbs** for clean air, and **isolated the sick**."],
+      ["What was the role of the barber surgeon?","A **craftsman who cut hair AND performed minor surgery** — tooth extraction, bloodletting, and setting broken bones."],
+      ["What was the role of the physician?","A **university-trained doctor** who diagnosed illness and prescribed treatments — but **did not perform surgery**."]
+    ]},
+    { name:"Surgery", cards:[
+      ["What was the main problem with medieval surgery?","There was **no anaesthetic**, so surgery was **extremely painful** — patients had to be held down."],
+      ["What was cauterisation?","**Burning a wound with a hot iron** to seal it and stop bleeding — very painful and could cause infection."],
+      ["Why was medieval surgery so dangerous?","Because surgeons **didn't understand infection or germs** — they used dirty instruments."],
+      ["What was the impact of the Church on surgery?","The Church **banned dissection** of human bodies, so surgeons had **very limited knowledge of anatomy**."],
+      ["How did surgeons learn about anatomy?","From **Galen's books** — but Galen had dissected **animals**, not humans, so some of his ideas were wrong."],
+      ["What was the survival rate of medieval surgery?","Very low — most patients died from **infection, blood loss, or shock**."]
+    ]},
+    { name:"Public Health", cards:[
+      ["What was public health like in medieval towns?","Very poor — **no sewers**, **rubbish in the streets**, and **shared water sources** that were often contaminated."],
+      ["What public health measures did monasteries have?","Monasteries had **clean water pipes**, **latrines**, and **bath houses** — much cleaner than towns."],
+      ["How did towns try to clean up?","Some towns passed **local laws** to remove rubbish and **banned animals** from the streets — but enforcement was weak."],
+      ["What was the government's role in public health?","Almost none — the **king and government did nothing**. It was left to **local communities**."],
+      ["How did people respond to the Black Death in 1348?","They **quarantined the sick**, **closed public places**, and **burned infected items** — but they didn't understand the cause."],
+      ["Why was medieval public health so poor?","Because of **limited scientific knowledge**, **no government action**, and **poverty**."]
+    ]},
+    { name:"Key Individuals & Medical Knowledge", cards:[
+      ["Who was Hippocrates?","A **Greek physician** (c460–c370 BC) — developed the **Four Humours** and the **Hippocratic Oath**."],
+      ["Who was Galen?","A **Roman physician** (c129–c216 AD) — developed the **Four Humours** and the **Theory of Opposites**; his books were used for over **1000 years**."],
+      ["Who was Avicenna?","A **Persian physician** (980–1037) who wrote **The Canon of Medicine** — used in European universities."],
+      ["How was Galen's work preserved?","The **Church** copied and preserved his books in monasteries — they became the **standard medical texts**."],
+      ["Why did Galen's ideas survive so long?","Because the **Church supported them** — they fit with the idea of a **balanced, God-created universe**."],
+      ["What was taught in medieval universities?","Medicine was taught from **Galen's and Hippocrates' books** — students learned by **reading**, not **dissecting**."]
+    ]}
+  ]},
+  { name:"Renaissance Medicine c1500–c1700", groups:[
+    { name:"Causes of Disease", cards:[
+      ["Did the Four Humours theory survive into the Renaissance?","Yes — the Four Humours was **still widely believed** in 1500, though it gradually began to be questioned."],
+      ["What was the miasma theory in the Renaissance?","**Still dominant** — people continued to believe disease was caused by **bad air**."],
+      ["Who challenged the Four Humours in the Renaissance?","**Paracelsus** (1493–1541) argued that disease was caused by **chemical imbalances** in the body."],
+      ["Who was Van Helmont?","A **Flemish physician** (1580–1644) who believed disease was caused by **chemical and biological agents**."],
+      ["What was the 'spontaneous generation' theory?","The belief that **living organisms came from non-living matter** — disproved by **Pasteur** in 1861."]
+    ]},
+    { name:"Treatments and Prevention", cards:[
+      ["What new treatments appeared in the Renaissance?","**Chemical remedies** (Paracelsus) and **quinine** (from Peru) for malaria — a breakthrough treatment."],
+      ["Who was Thomas Sydenham?","An **English physician** (1624–1689) — emphasised **careful observation and diagnosis**, the **'English Hippocrates'**."],
+      ["What was the 'royal touch'?","A practice where the **king touched sufferers of scrofula** to cure them — a **supernatural** remedy."],
+      ["What was transference?","A **supernatural cure** where illness was transferred to an object or animal."],
+      ["Did bloodletting continue in the Renaissance?","**Yes** — bloodletting and purging remained the main treatments."],
+      ["What was the impact of the printing press?","The **printing press** (c1440) allowed **medical books to be printed and shared** — **accelerating the exchange of ideas**."]
+    ]},
+    { name:"Surgery", cards:[
+      ["Who was Andreas Vesalius?","A **Flemish anatomist** (1514–1564) — wrote **On the Fabric of the Human Body** (1543), **correcting Galen's mistakes**."],
+      ["How did Vesalius improve anatomy?","He **dissected human bodies** and proved some of Galen's ideas were **wrong** — e.g. the jawbone is one bone, not two."],
+      ["Who was Ambroise Paré?","A **French surgeon** (1510–1590) — **abandoned cauterisation** and used **ligatures** to stop bleeding."],
+      ["What was Paré's 'ointment'?","A **soothing ointment** made of egg yolk, oil of roses, and turpentine — used instead of **boiling oil**."],
+      ["Who was William Harvey?","An **English physician** (1578–1657) — discovered that **blood circulates around the body**, pumped by the **heart**."],
+      ["What did Harvey prove about the heart?","That the **heart pumps blood** around the body in a **one-way system** — not that the liver produces blood, as Galen claimed."],
+      ["Did surgery improve in the Renaissance?","**Only slightly** — Paré's ligatures helped, but there was still **no anaesthetic** and **no understanding of infection**."]
+    ]},
+    { name:"Public Health", cards:[
+      ["What was the Great Plague of 1665?","The **last major outbreak of plague** in England — around **100,000 people died**."],
+      ["How did the government respond to the Great Plague?","They issued **plague orders** — **quarantining infected households**, **killing cats and dogs**, and **closing public places**."],
+      ["Did public health improve in the Renaissance?","**Very little** — towns were still dirty, water was still contaminated, and there was **no national public health system**."],
+      ["What were 'pest houses'?","Buildings where **plague victims were isolated** — a form of **public health measure**."],
+      ["What was the impact of the Great Fire of London (1666)?","It **destroyed much of the city**, but also **killed the rats and fleas** that spread the plague."],
+      ["Did the government build sewers in the Renaissance?","**No** — proper sewers were not built until the **19th century** (Bazalgette, 1858–1875)."]
+    ]},
+    { name:"Key Individuals & Medical Knowledge", cards:[
+      ["What was the impact of Vesalius?","He **corrected Galen's errors** — but his work was **slow to be accepted**."],
+      ["What was the impact of Paré?","He **improved surgical techniques** (ligatures, ointments) — but surgery was still **limited**."],
+      ["What was the impact of Harvey?","He **proved blood circulates** — a **major step forward**, but slow to be accepted."],
+      ["What was the Royal Society?","A **scientific society** founded in **1660** — encouraged **experiment, observation, and the sharing of ideas**."],
+      ["Why was change slow in the Renaissance?","Because of **continued belief in Galen**, **the Church's influence**, **lack of scientific method**, and **no government support**."],
+      ["What was the 'scientific revolution'?","A period of **major change in thinking** (c1550–c1700) — people began to **question old ideas** and rely on **observation and experiment**."]
+    ]}
+  ]},
+  { name:"18th & 19th Century Medicine c1700–c1900", groups:[
+    { name:"Causes of Disease", cards:[
+      ["Who was Edward Jenner?","An **English doctor** (1749–1823) — in **1796** he discovered that **cowpox protected against smallpox**, developing the **first vaccine**."],
+      ["Who was Louis Pasteur?","A **French chemist** (1822–1895) — in **1861** he developed the **Germ Theory**, proving that **microbes in the air caused disease**."],
+      ["Who was Robert Koch?","A **German doctor** (1843–1910) — identified the **specific bacteria** that caused **TB (1882), cholera (1883), and anthrax (1876)**."],
+      ["What was the 'Germ Theory'?","The theory that **microbes (germs) cause disease** — developed by **Pasteur** in 1861."],
+      ["What did John Snow discover?","In **1854** he traced a **cholera outbreak in London** to a **water pump on Broad Street** — proving cholera was **waterborne**."],
+      ["What was the 'spontaneous generation' theory?","The belief that **living organisms came from non-living matter** — **Pasteur disproved this** in 1861."],
+      ["What was the 'miasma' theory and when did it decline?","The belief that **bad air caused disease** — it declined in the **1860s–1870s** as the **Germ Theory** became accepted."]
+    ]},
+    { name:"Treatments and Prevention", cards:[
+      ["What was the impact of Jenner's vaccine?","It was the **first vaccine** — but vaccination **wasn't made compulsory until 1853**, and many people **opposed it**."],
+      ["What did Pasteur develop vaccines for?","**Anthrax (1881)** and **rabies (1885)** — he proved that vaccines could be developed for many diseases."],
+      ["What was the 'Public Health Act 1848'?","The **first national public health law** — encouraged towns to **improve sewage, drainage, and water supplies**."],
+      ["What was the 'Public Health Act 1875'?","Made it **compulsory** for local councils to **provide clean water, proper drainage, and refuse collection**."],
+      ["What was the 'Great Stink' of 1858?","The **terrible smell from the River Thames** — it forced Parliament to fund **Bazalgette's sewer system**."],
+      ["Who was Joseph Bazalgette?","A **civil engineer** who designed **London's sewer system** (1858–1875) — it **transformed public health**."]
+    ]},
+    { name:"Surgery", cards:[
+      ["Who was James Simpson?","A **Scottish doctor** (1811–1870) — in **1847** he discovered the **anaesthetic properties of chloroform**."],
+      ["What was the impact of anaesthetics?","They **eliminated pain during surgery** — surgeons could now perform **longer, more complex operations**."],
+      ["What was the 'Black Period' of surgery?","A period after anaesthetics were introduced when **death rates rose** — surgeons operated more deeply and **infection increased**."],
+      ["Who was Joseph Lister?","A **British surgeon** (1827–1912) — in **1867** he introduced **carbolic acid** as an **antiseptic**."],
+      ["What was the 'aseptic' method?","Using **sterile conditions** — gloves, masks, sterilised instruments — to prevent infection."],
+      ["Who was Florence Nightingale?","A **British nurse** (1820–1910) — improved **hospital hygiene** and founded the **Nightingale Training School** in 1860."]
+    ]},
+    { name:"Public Health", cards:[
+      ["Who was Edwin Chadwick?","A **civil servant** who wrote the **Report on the Sanitary Conditions of the Labouring Population (1842)**."],
+      ["What was the 'Public Health Act 1848'?","The **first national public health law** — set up a **General Board of Health**."],
+      ["What was the 'Great Stink'?","The **terrible smell from the River Thames in 1858** — forced Parliament to fund **Bazalgette's sewer system**."],
+      ["Who was Joseph Bazalgette?","A **civil engineer** who designed **London's sewer system** (1858–1875)."],
+      ["What was the 'Public Health Act 1875'?","Made it **compulsory** for local councils to **provide clean water, drainage, and refuse collection**."],
+      ["Why did public health improve in the 1800s?","Because of **Chadwick's report**, the **Great Stink**, **Snow's cholera work**, and the **Germ Theory**."]
+    ]},
+    { name:"Key Individuals", cards:[
+      ["Who was Edward Jenner?","**1749–1823** — developed the **first vaccine** (smallpox, 1796)."],
+      ["Who was Louis Pasteur?","**1822–1895** — developed the **Germ Theory** (1861)."],
+      ["Who was Robert Koch?","**1843–1910** — identified the **specific bacteria** for TB, cholera, and anthrax."],
+      ["Who was John Snow?","**1813–1858** — proved **cholera was waterborne** (1854)."],
+      ["Who was Florence Nightingale?","**1820–1910** — improved **hospital hygiene** and **nursing training**."],
+      ["Who was Joseph Lister?","**1827–1912** — introduced **antiseptics** (carbolic acid, 1867)."],
+      ["Who was James Simpson?","**1811–1870** — discovered **chloroform** as an anaesthetic (1847)."]
+    ]}
+  ]},
+  { name:"Modern Medicine c1900–Present", groups:[
+    { name:"Causes of Disease", cards:[
+      ["What was the impact of DNA discovery?","**Watson, Crick, Franklin, and Wilkins** discovered the **structure of DNA in 1953** — led to **genetic medicine**."],
+      ["What was the 'Human Genome Project'?","A **13-year project** (1990–2003) that **mapped all human genes**."],
+      ["What are the main causes of disease today?","**Lifestyle factors**, **genetics**, **viruses and bacteria**, and **environmental factors**."],
+      ["What was the link between smoking and cancer?","**Richard Doll** and **Austin Bradford Hill** proved the link in **1950**."],
+      ["What was the impact of the 'magic bullet'?","**Paul Ehrlich** developed **Salvarsan 606** (1909) to treat **syphilis** — the first chemical cure."]
+    ]},
+    { name:"Treatments and Prevention", cards:[
+      ["Who discovered penicillin?","**Alexander Fleming** (1928) — but **Florey and Chain** mass-produced it during **WWII**."],
+      ["When was penicillin first mass-produced?","**1940–1944** — **Florey and Chain** developed a method to mass-produce it in the USA."],
+      ["What was the impact of antibiotics?","They **revolutionised medicine** — infections that once killed millions became **easily treatable**."],
+      ["When was the NHS founded?","**1948** — by **Aneurin Bevan** — free healthcare for all at the point of use."],
+      ["What was the contraceptive pill?","Approved in **1961** — gave women **control over their fertility**."],
+      ["What was the impact of vaccination programmes?","**Smallpox was eradicated in 1980** — mass vaccination has **eliminated or controlled** many diseases."]
+    ]},
+    { name:"Surgery", cards:[
+      ["When was the first successful heart transplant?","**1967** — by **Christiaan Barnard**. The patient lived **18 days**."],
+      ["What was the impact of blood transfusion?","Blood could be **stored and transported** for the first time — **saved thousands of lives**."],
+      ["What was the impact of keyhole surgery?","Surgeons could operate through **small incisions** — **less pain, faster recovery**."],
+      ["What was the impact of robotic surgery?","**Precision surgery** using robotic arms — improved accuracy for **delicate operations**."],
+      ["What was the impact of plastic surgery?","**Harold Gillies** pioneered **facial reconstruction** for soldiers during **WWI**."],
+      ["What was the impact of organ transplants?","**Kidney transplants (1950s)**, **heart transplants (1967)**, and **liver transplants** have become **routine**."]
+    ]},
+    { name:"Public Health", cards:[
+      ["What were the Liberal Reforms?","**1906–1914** — old-age pensions, national insurance, free school meals."],
+      ["What was the 'Beveridge Report'?","**1942** — proposed a **welfare state** to tackle the 'five giants'."],
+      ["When was the NHS founded?","**1948** — by **Aneurin Bevan** — free healthcare for all at the point of use."],
+      ["What was the 'Clean Air Act 1956'?","It **reduced smog** by limiting the burning of coal in cities."],
+      ["What was the 'Public Health Act 1875'?","Made it compulsory for local councils to **provide clean water, drainage, and refuse collection**."],
+      ["What was the government's response to COVID-19?","**Lockdowns, mass vaccination, and NHS expansion** — a **massive government intervention**."]
+    ]},
+    { name:"Key Individuals", cards:[
+      ["Who was Alexander Fleming?","**1881–1955** — discovered **penicillin** (1928)."],
+      ["Who were Florey and Chain?","**Howard Florey** and **Ernst Chain** — mass-produced **penicillin** during WWII."],
+      ["Who was Aneurin Bevan?","**1897–1960** — the **Minister of Health** who founded the **NHS** in 1948."],
+      ["Who was Christiaan Barnard?","**1922–2001** — performed the **first successful heart transplant** (1967)."],
+      ["Who were Watson, Crick, Franklin, and Wilkins?","The scientists who discovered the **structure of DNA** (1953)."],
+      ["Who was Paul Ehrlich?","**1854–1915** — developed **Salvarsan 606** (1909), the first **magic bullet**."],
+      ["Who was Richard Doll?","**1912–2005** — proved the link between **smoking and lung cancer** (1950)."]
+    ]}
+  ]},
+  { name:"Key Themes Across Time", groups:[
+    { name:"Change and Continuity", cards:[
+      ["What was the biggest change in the cause of disease over time?","The shift from **supernatural and humoral explanations** to the **Germ Theory and scientific explanations**."],
+      ["What stayed the same in treatments over time?","**Bloodletting and purging** continued from medieval times until the **19th century**."],
+      ["What was the biggest change in surgery?","The **combination of anaesthetics (1847) and antiseptics (1867)** — safe, painless surgery."],
+      ["What stayed the same in public health?","**Government inaction** continued until the **19th century**."],
+      ["Why was change so slow in medicine?","Because of **religious beliefs**, **lack of scientific knowledge**, **no government support**, and **the influence of Galen**."]
+    ]},
+    { name:"The Role of Government", cards:[
+      ["What was the government's role in medieval medicine?","**Almost none** — the king and government did **nothing** to improve public health."],
+      ["When did the government start to act?","From the **1840s onwards** — **Chadwick's report (1842)**, the **Public Health Acts (1848, 1875)**, and **compulsory vaccination (1853)**."],
+      ["What was the government's role in the 20th century?","**Massive expansion** — the **NHS (1948)**, **vaccination programmes**, **Clean Air Acts**."],
+      ["What was the 'Beveridge Report'?","**1942** — proposed a **welfare state** to tackle the 'five giants'."],
+      ["Why did the government's role increase?","Because of **scientific discoveries**, **public pressure**, **war**, and the **growth of democracy**."]
+    ]},
+    { name:"The Role of War", cards:[
+      ["How did WWI change medicine?","**Blood transfusion, plastic surgery, and shell-shock treatment** all advanced."],
+      ["How did WWII change medicine?","**Penicillin was mass-produced** and the **NHS was founded**."],
+      ["What was the impact of the Crimean War?","**Florence Nightingale** improved **hospital hygiene** — this **saved thousands of lives**."],
+      ["Why is war important in the history of medicine?","It creates **urgent need** for new treatments — governments invest **heavily in medical research** during wartime."],
+      ["What was the impact of the Boer War?","It exposed the **poor health of British recruits** — led to **concerns about national efficiency**."]
+    ]},
+    { name:"The Role of the Church", cards:[
+      ["What was the Church's role in medieval medicine?","It **controlled medical knowledge** — monasteries preserved **Galen's books** and ran **hospitals**."],
+      ["Why did the Church ban dissection?","Because they believed the **body was sacred** — this **limited anatomical knowledge** for centuries."],
+      ["When did the Church's influence decline?","From the **Renaissance onwards** — the **Reformation (1517)** and **scientific revolution** weakened its control."],
+      ["How did the Church help medicine?","Monasteries **preserved ancient texts** and **provided care for the sick**."],
+      ["What was the impact of the Reformation?","It **weakened the Church's control** — **dissection became more common** in the 1500s."]
+    ]},
+    { name:"The Role of Science & Technology", cards:[
+      ["What was the impact of the printing press?","It allowed **medical ideas to spread rapidly** — **accelerated change** in the Renaissance."],
+      ["What was the impact of the microscope?","It allowed scientists to **see microbes for the first time** — crucial for **Pasteur's Germ Theory**."],
+      ["What was the impact of X-rays?","**X-rays (1895)** allowed doctors to **see inside the body** without surgery."],
+      ["What was the impact of DNA?","**DNA (1953)** led to **genetic medicine, screening, and gene therapy**."],
+      ["What was the impact of the internet?","It has **transformed the sharing of medical knowledge** — and enabled **telemedicine**."]
+    ]},
+    { name:"The Role of Individuals", cards:[
+      ["Who was the most important individual in the history of medicine?","**Louis Pasteur** — his **Germ Theory (1861)** was the **single most important breakthrough**."],
+      ["Who was the most important individual in surgery?","**Joseph Lister** — his **antiseptics (1867)** made **safe surgery possible**."],
+      ["Who was the most important individual in public health?","**Edwin Chadwick** — his **report (1842)** led to the **first public health laws**."],
+      ["Who was the most important individual in vaccination?","**Edward Jenner** — his **smallpox vaccine (1796)** was the **first vaccine**."],
+      ["Why are individuals important in medicine?","Because **one person's discovery can transform** how disease is understood — but **change also requires government, money, and technology**."]
+    ]}
+  ]}
+]},
+
+{ id:"wf", title:"The Western Front", emoji:"🪖", units:[
+  { name:"Conditions on the Western Front", groups:[
+    { name:"The Trench System", cards:[
+      ["What was the trench system?","A **network of trenches** stretching from the **North Sea to the Swiss border**."],
+      ["What was 'No Man's Land'?","The **area between the opposing trenches** — **barbed-wired, shell-cratered, and extremely dangerous** to cross."],
+      ["What was a 'dugout'?","An **underground shelter** in the trench — used for **sleeping, eating, and medical treatment**."],
+      ["What was the 'fire step'?","A **raised platform** in the trench that soldiers stood on to **fire over the top**."],
+      ["What were 'communication trenches'?","**Trenches that connected the front line to the support and reserve lines** — used to move troops and **stretcher bearers**."],
+      ["What was the 'front line'?","The **trench closest to the enemy** — the **most dangerous** position."]
+    ]},
+    { name:"Life in the Trenches", cards:[
+      ["What was the weather like on the Western Front?","**Mud, rain, snow, and freezing cold** — the **waterlogged trenches** caused **trench foot**."],
+      ["What was the 'trench foot'?","A **painful condition** caused by standing in **cold, wet conditions** — could lead to **amputation** if untreated."],
+      ["What were the rats like?","**Huge, disease-carrying rats** — they fed on **food, corpses, and wounds** — spread **disease**."],
+      ["What were the lice like?","**Body lice** caused **trench fever** — a **debilitating illness** with fever and severe headaches."],
+      ["What did soldiers eat?","**Bully beef, biscuits, and tinned food** — often **cold and monotonous**."],
+      ["What was the 'stand-to'?","A **daily routine** at dawn and dusk — soldiers **stood on the fire step** ready to repel an attack."]
+    ]},
+    { name:"The Ypres Salient", cards:[
+      ["Where was the Ypres Salient?","In **Belgium** — a **bulge in the Allied line** surrounded by German forces on three sides."],
+      ["Why was Ypres important?","It was a **key strategic position** — **three major battles** were fought there (1914, 1915, 1917)."],
+      ["What was the 'Second Battle of Ypres'?","**1915** — the **first large-scale use of poison gas** (chlorine) by the Germans."],
+      ["What was the 'Third Battle of Ypres'?","**1917** — also known as **Passchendaele** — fought in **appalling mud** with **hundreds of thousands of casualties**."],
+      ["What was the 'Menin Gate'?","A **memorial in Ypres** to the **54,000 British and Commonwealth soldiers** with **no known grave**."]
+    ]}
+  ]},
+  { name:"Injuries, Illnesses & Weapons", groups:[
+    { name:"Weapons and Their Impact", cards:[
+      ["What was the impact of machine guns?","They **fired hundreds of rounds per minute** — they **dominated No Man's Land**."],
+      ["What was the impact of artillery?","**Shells caused the most casualties** — **shrapnel wounds, blast injuries, and shell shock**."],
+      ["What was the impact of poison gas?","**Chlorine, phosgene, and mustard gas** caused **blindness, burns, and lung damage**."],
+      ["What was the impact of tanks?","First used at the **Battle of the Somme (1916)** — **slow and unreliable** at first, but **revolutionised warfare**."],
+      ["What was the 'shrapnel'?","**Metal fragments** from exploding shells — caused **deep, contaminated wounds**."],
+      ["What was the impact of barbed wire?","It **slowed down infantry attacks** and made soldiers **easy targets**."]
+    ]},
+    { name:"Injuries and Illnesses", cards:[
+      ["What was 'shell shock'?","A **psychological condition** caused by the trauma of shelling — **tremors, nightmares, paralysis, and mutism**."],
+      ["What was 'trench fever'?","A **disease spread by lice** — caused **fever, headaches, and severe pain**."],
+      ["What was 'trench foot'?","A **condition caused by standing in cold, wet conditions** — the feet became **numb, swollen, and could turn gangrenous**."],
+      ["What was 'gas gangrene'?","A **severe infection of wounds** caused by **bacteria in the soil** — often **fatal** without **amputation**."],
+      ["What was the 'Spanish flu'?","A **deadly influenza pandemic (1918–19)** — killed **more people than the war itself**."],
+      ["What were the most common injuries?","**Shrapnel wounds, fractures, burns, gas injuries, and blast injuries** — many **contaminated with soil**."]
+    ]}
+  ]},
+  { name:"Medical Services & Evacuation", groups:[
+    { name:"The Chain of Evacuation", cards:[
+      ["What was the 'chain of evacuation'?","The **system for moving wounded soldiers** from the front line to safety — it had **four main stages**."],
+      ["What was the 'Regimental Aid Post' (RAP)?","The **first medical post**, right behind the trenches — gave **basic first aid** and **triage**."],
+      ["What was the 'Field Ambulance'?","A **mobile medical unit** — provided **emergency treatment** and moved wounded to **Casualty Clearing Stations**."],
+      ["What was a 'Casualty Clearing Station' (CCS)?","A **frontline hospital** — often just **a few miles behind the lines** — where **serious surgery** was carried out."],
+      ["What was a 'Base Hospital'?","A **large hospital** well behind the lines — **long-term care and specialist surgery**."],
+      ["What was a 'stretcher bearer'?","A **soldier who carried the wounded** from the battlefield to the RAP — **extremely dangerous work**."]
+    ]},
+    { name:"Medical Services", cards:[
+      ["What was the RAMC?","The **Royal Army Medical Corps** — responsible for the **medical care of soldiers**."],
+      ["What was the FANY?","The **First Aid Nursing Yeomanry** — women who **drove ambulances and ran hospitals** near the front line."],
+      ["What was the VAD?","The **Voluntary Aid Detachment** — **volunteer nurses** who worked in hospitals and **Casualty Clearing Stations**."],
+      ["What was a 'hospital ship'?","A **ship used to transport wounded soldiers** back to Britain."],
+      ["What was a 'triage'?","The system of **sorting wounded soldiers by priority** — those **most likely to survive** were treated first."]
+    ]}
+  ]},
+  { name:"Developments in Medicine & Surgery", groups:[
+    { name:"Surgery and Treatment", cards:[
+      ["What was the 'Thomas splint'?","A **splint that stabilised broken legs** — reduced deaths from **fractures** from **80% to 20%**."],
+      ["What was the 'Carrel-Dakin' method?","A **method of wound treatment** using **Dakin's solution** — **reduced infection** and **saved limbs**."],
+      ["What was the impact of X-rays?","**X-rays** allowed doctors to **see bullets and shrapnel inside the body** — **revolutionised diagnosis**."],
+      ["What was the impact of blood transfusion?","**Blood was stored and transported** for the first time — **saved thousands of lives**."],
+      ["Who was Geoffrey Keynes?","A **surgeon** who pioneered the use of **blood transfusion** near the front line."],
+      ["What was the impact of plastic surgery?","**Harold Gillies** pioneered **facial reconstruction** for soldiers with **facial wounds**."],
+      ["Who was Harvey Cushing?","An **American brain surgeon** who developed **new techniques** for **brain surgery** during WWI."]
+    ]},
+    { name:"Medical Advances", cards:[
+      ["What was the impact of mobile laboratories?","They allowed **bacteriological testing** near the front line — helped **identify infections**."],
+      ["What was the impact of blood banks?","**Blood could be stored** and used when needed — crucial for **emergency surgery**."],
+      ["What was the impact of gas masks?","They **protected soldiers from poison gas** — response to the **use of gas at Ypres (1915)**."],
+      ["What was the impact of the 'Brooke' ambulance?","A **motorised ambulance** that could **move wounded soldiers quickly** from the front line to the CCS."],
+      ["What was the impact of the 'Casualty Clearing Station'?","It **brought surgery closer to the front line** — **saved lives** by **reducing the time** between wounding and treatment."]
+    ]}
+  ]},
+  { name:"The Role of Medical Personnel", groups:[
+    { name:"Doctors and Surgeons", cards:[
+      ["What was the role of doctors on the Western Front?","They **diagnosed and treated** wounded soldiers — worked in **RAPs, Field Ambulances, CCSs, and Base Hospitals**."],
+      ["What was the role of surgeons?","They performed **emergency surgery** — often **amputations, wound debridement, and blood transfusions**."],
+      ["What challenges did doctors face?","**Overwhelming numbers of casualties**, **limited supplies**, and **the constant threat of attack**."],
+      ["What was the role of the 'consultant surgeon'?","A **senior surgeon** who advised on **surgical techniques** and **trained other doctors**."]
+    ]},
+    { name:"Nurses and Volunteers", cards:[
+      ["What was the role of nurses on the Western Front?","They **cared for wounded soldiers** — dressing wounds, giving medication, and providing **emotional support**."],
+      ["Who was Edith Cavell?","A **British nurse** who helped **Allied soldiers escape from occupied Belgium** — **executed by the Germans in 1915**."],
+      ["What was the role of the FANY?","The **First Aid Nursing Yeomanry** — women who **drove ambulances and ran hospitals** near the front line."],
+      ["What was the role of the VAD?","The **Voluntary Aid Detachment** — **volunteer nurses** who worked in hospitals and **Casualty Clearing Stations**."],
+      ["What challenges did nurses face?","**Overwhelming numbers of wounded**, **limited supplies**, and **the psychological impact of treating horrific injuries**."]
+    ]},
+    { name:"Stretcher Bearers", cards:[
+      ["What was the role of stretcher bearers?","They **carried the wounded from the battlefield** to the **Regimental Aid Post** — often under **heavy fire**."],
+      ["Why was being a stretcher bearer so dangerous?","Because they had to **cross No Man's Land** — often **without weapons** — to reach wounded soldiers."],
+      ["Who were the 'stretcher bearers'?","Often **infantry soldiers** or **medics** — many were **conscientious objectors**."],
+      ["What was the 'four-man stretcher team'?","A team of **four men** who carried a **stretcher** — had to **move quickly and carefully** to avoid dropping the wounded soldier."]
+    ]}
+  ]},
+  { name:"Challenges & Exam Skills", groups:[
+    { name:"Challenges on the Western Front", cards:[
+      ["What was the biggest challenge for medical services?","The **sheer number of casualties** — **over 1 million British soldiers were wounded** on the Western Front."],
+      ["What was the problem with infection?","**Gas gangrene** and other infections were **common** because wounds were **contaminated with soil**."],
+      ["What was the problem with transport?","**Mud, shell craters, and destroyed roads** made it **very difficult to move wounded soldiers** to safety."],
+      ["What was the problem with supplies?","**Medical supplies were often limited** — especially **blood, antiseptics, and anaesthetics**."],
+      ["What was the problem with gas?","**Gas attacks** required **specialist treatment** — and **gas masks** were not always effective."]
+    ]},
+    { name:"Exam Skills", cards:[
+      ["How do you answer a 'source utility' question?","Evaluate **what the source shows**, **what it leaves out**, and how it **relates to what you know** — mention **origin, purpose, and context**."],
+      ["How do you answer an 'explain why' question?","Give **two or three developed reasons** with **specific evidence** — link each to the **question's focus**."],
+      ["How do you structure a 16-mark answer?","**Introduction** (state your argument), **paragraphs** (arguments for and against), **conclusion** (restate your judgement with **specific criteria**)."],
+      ["What are the key themes of the Western Front?","**Conditions**, **injuries and illnesses**, **medical services**, **evacuation**, **developments**, and **the role of personnel**."],
+      ["How do you answer a 'how useful' question?","Consider **content**, **origin**, **purpose**, and **context** — explain how the source **helps or limits** your understanding."],
+      ["How do you answer a 'follow-up' question?","Suggest **one specific source** you would use and explain **why it would help** — e.g. 'A field hospital record would help because it would show the types of injuries treated.'"]
+    ]}
+  ]}
+]}
+];
+
+/* =========================================================
+   PRECOMPUTE — absolute numeric indices
+   ========================================================= */
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function rich(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");}
+
+var ALL_CARDS = [];
+var SECTION_INDICES = {};
+var GROUP_INDICES = {};
+var GROUP_META = {};
+var SEC = {};
+
+SECTIONS.forEach(function(sec){
+  SEC[sec.id] = sec;
+  SECTION_INDICES[sec.id] = [];
+  GROUP_INDICES[sec.id] = {};
+  GROUP_META[sec.id] = [];
+
+  sec.units.forEach(function(u){
+    u.groups.forEach(function(g){
+      var groupKey = u.name + "|||" + g.name;
+      var indices = [];
+      g.cards.forEach(function(c){
+        var abs = ALL_CARDS.length;
+        ALL_CARDS.push({
+          abs: abs,
+          sec: sec.id,
+          grp: g.name,
+          qHtml: rich(c[0]),
+          aHtml: rich(c[1])
+        });
+        SECTION_INDICES[sec.id].push(abs);
+        indices.push(abs);
+      });
+      GROUP_INDICES[sec.id][groupKey] = indices;
+      GROUP_META[sec.id].push({
+        key: groupKey,
+        name: g.name,
+        unitName: u.name,
+        indices: indices
+      });
+    });
+  });
+});
+
+/* =========================================================
+   STATE
+   ========================================================= */
+var STATUS = {};
+var S = {
+  sec: "med",
+  filter: "all",
+  deck: [],
+  i: 0,
+  flipped: false,
+  shuffled: false,
+  clicks: 0
+};
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+var STORE = "edexcel-med-wf-v6";
+var storageOK = false;
+try {
+  window.localStorage.setItem("__t__", "1");
+  window.localStorage.removeItem("__t__");
+  storageOK = true;
+} catch(e) { storageOK = false; }
+
+function saveData(){
+  if(!storageOK) return;
+  try{
+    window.localStorage.setItem(STORE, JSON.stringify({
+      s: STATUS, sec: S.sec, filter: S.filter,
+      shuffled: S.shuffled, i: S.i
+    }));
+  }catch(e){}
+}
+function loadData(){
+  if(!storageOK) return;
+  try{
+    var raw = window.localStorage.getItem(STORE);
+    if(!raw) return;
+    var d = JSON.parse(raw);
+    if(!d) return;
+    if(d.s && typeof d.s === "object") STATUS = d.s;
+    if(d.sec && SEC[d.sec]) S.sec = d.sec;
+    if(d.filter === "all" || d.filter === "review" || (GROUP_INDICES[S.sec] && GROUP_INDICES[S.sec][d.filter])){
+      S.filter = d.filter;
+    }
+    if(typeof d.shuffled === "boolean") S.shuffled = d.shuffled;
+    if(typeof d.i === "number" && d.i >= 0) S.i = d.i;
+  }catch(e){}
+}
+window.addEventListener("pagehide", saveData);
+window.addEventListener("beforeunload", saveData);
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+function indicesFor(filterKey){
+  if(filterKey === "all") return SECTION_INDICES[S.sec].slice();
+  if(filterKey === "review"){
+    var src = SECTION_INDICES[S.sec];
+    var out = [];
+    for(var i = 0; i < src.length; i++){
+      if(STATUS[src[i]] === "review") out.push(src[i]);
+    }
+    return out;
+  }
+  return (GROUP_INDICES[S.sec][filterKey] || []).slice();
+}
+function countKnown(indices){
+  var n = 0;
+  for(var i = 0; i < indices.length; i++) if(STATUS[indices[i]] === "known") n++;
+  return n;
+}
+function countReview(indices){
+  var n = 0;
+  for(var i = 0; i < indices.length; i++) if(STATUS[indices[i]] === "review") n++;
+  return n;
+}
+
+/* =========================================================
+   STATS BAR
+   ========================================================= */
+function refreshStats(){
+  var sectionIdx = SECTION_INDICES[S.sec];
+  var known = countKnown(sectionIdx);
+  var review = countReview(sectionIdx);
+
+  document.getElementById("statClicks").textContent = S.clicks;
+  document.getElementById("statKnown").textContent = known;
+  document.getElementById("statReview").textContent = review;
+  document.getElementById("statDeck").textContent = S.deck.length;
+  document.getElementById("statIndex").textContent = S.deck.length ? (S.i + 1) : 0;
+
+  var curAbs = S.deck.length ? S.deck[S.i] : null;
+  document.getElementById("statCard").textContent =
+    (curAbs === null || curAbs === undefined) ? "-" : ("# " + curAbs);
+  document.getElementById("statState").textContent =
+    (curAbs === null || curAbs === undefined) ? "-" : (STATUS[curAbs] || "unmarked");
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+function rebuildSidebar(){
+  var container = document.getElementById("topics");
+  container.innerHTML = "";
+
+  container.appendChild(makeSidebarBtn("All topics", "all", true));
+  container.appendChild(makeSidebarBtn("Review pile", "review", true));
+
+  var lastUnit = null;
+  for(var i = 0; i < GROUP_META[S.sec].length; i++){
+    var gi = GROUP_META[S.sec][i];
+    if(gi.unitName !== lastUnit){
+      var h = document.createElement("div");
+      h.className = "utitle";
+      h.textContent = gi.unitName;
+      container.appendChild(h);
+      lastUnit = gi.unitName;
+    }
+    container.appendChild(makeSidebarBtn(gi.name, gi.key, false));
+  }
+
+  var all = container.querySelectorAll("[data-f]");
+  for(var j = 0; j < all.length; j++){
+    if(all[j].getAttribute("data-f") === S.filter){
+      all[j].setAttribute("aria-current","true");
+    }
+  }
+}
+
+function makeSidebarBtn(label, filterKey, special){
+  var indices = indicesFor(filterKey);
+  var kCount = countKnown(indices);
+  var rCount = countReview(indices);
+  var total = indices.length;
+  var pct = total ? (kCount / total * 100) : 0;
+  var col = (filterKey === "review") ? "#f472b6" : "var(--accent)";
+
+  var b = document.createElement("button");
+  b.className = "topic" + (special ? " special" : "");
+  b.type = "button";
+  b.setAttribute("data-f", filterKey);
+
+  var ring = document.createElement("span");
+  ring.className = "ring";
+  ring.style.background = "conic-gradient(" + col + " " + pct + "%, rgba(255,255,255,.12) 0)";
+
+  var nm = document.createElement("span");
+  nm.className = "nm";
+  nm.textContent = label;
+
+  var ct = document.createElement("span");
+  ct.className = "ct";
+  ct.textContent = (filterKey === "review") ? String(rCount) : (kCount + "/" + total);
+
+  b.appendChild(ring); b.appendChild(nm); b.appendChild(ct);
+
+  b.onclick = function(){
+    S.filter = filterKey;
+    S.i = 0;
+    S.flipped = false;
+    document.getElementById("card").classList.remove("flip");
+    buildDeck();
+    rebuildSidebar();
+    renderCard();
+    refreshStats();
+    saveData();
+    closeDrawer();
+  };
+
+  return b;
+}
+
+/* =========================================================
+   DECK
+   ========================================================= */
+function buildDeck(){
+  var list = indicesFor(S.filter);
+  if(S.shuffled){
+    for(var i = list.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+  }
+  S.deck = list;
+  if(S.i >= list.length) S.i = Math.max(0, list.length - 1);
+  if(S.i < 0) S.i = 0;
+}
+
+/* =========================================================
+   RENDER CARD
+   ========================================================= */
+var lastShownAbs = null;
+
+function renderCard(){
+  var deck = S.deck;
+  var cardEl = document.getElementById("card");
+  var existing = document.querySelector(".empty");
+
+  if(deck.length === 0){
+    cardEl.style.display = "none";
+    if(!existing){
+      var e = document.createElement("div");
+      e.className = "empty";
+      e.innerHTML = S.filter === "review"
+        ? "<div><h3>Review pile is empty</h3><p>Hit <b>Need review</b> on any card to add it here.</p></div>"
+        : "<div><h3>No cards here</h3><p>Pick another topic from the sidebar.</p></div>";
+      document.getElementById("cardwrap").appendChild(e);
+    }
+    document.getElementById("cnt").textContent = "0 / 0";
+    document.getElementById("pfill").style.width = "0%";
+    document.getElementById("ptext").textContent = "0 / 0";
+    return;
+  }
+  if(existing) existing.remove();
+  cardEl.style.display = "";
+
+  var abs = deck[S.i];
+  var c = ALL_CARDS[abs];
+
+  if(abs !== lastShownAbs){
+    document.getElementById("qt").innerHTML = c.qHtml;
+    document.getElementById("at").innerHTML = c.aHtml;
+    document.getElementById("bf").textContent = c.grp;
+    document.getElementById("bb").textContent = c.grp + " · Answer";
+    lastShownAbs = abs;
+  }
+
+  document.getElementById("cnt").textContent = (S.i + 1) + " / " + deck.length;
+
+  var st = STATUS[abs];
+  document.getElementById("revBtn").className = "btn mark rev" + (st === "review" ? " on" : "");
+  document.getElementById("gotBtn").className = "btn mark got" + (st === "known" ? " on" : "");
+
+  var k = countKnown(deck);
+  var pct = deck.length ? (k / deck.length * 100) : 0;
+  document.getElementById("pfill").style.width = pct + "%";
+  document.getElementById("ptext").textContent = k + " / " + deck.length;
+
+  var sec = SEC[S.sec];
+  var label = S.filter === "all" ? "All topics"
+            : S.filter === "review" ? "Review pile"
+            : (function(){
+                for(var i = 0; i < GROUP_META[S.sec].length; i++){
+                  if(GROUP_META[S.sec][i].key === S.filter) return GROUP_META[S.sec][i].name;
+                }
+                return S.filter;
+              })();
+  document.getElementById("crumb").innerHTML = sec.emoji + " <b>" + sec.title + "</b> · " + esc(label);
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+function markKnown(){
+  S.clicks++;
+  var abs = S.deck[S.i];
+  if(abs === undefined){ refreshStats(); return; }
+  if(STATUS[abs] === "known") delete STATUS[abs];
+  else STATUS[abs] = "known";
+  saveData();
+  rebuildSidebar();
+  renderCard();
+  refreshStats();
+}
+
+function markReview(){
+  S.clicks++;
+  var abs = S.deck[S.i];
+  if(abs === undefined){ refreshStats(); return; }
+  if(STATUS[abs] === "review") delete STATUS[abs];
+  else STATUS[abs] = "review";
+  saveData();
+  if(S.filter === "review" && STATUS[abs] !== "review"){
+    buildDeck();
+  }
+  rebuildSidebar();
+  renderCard();
+  refreshStats();
+}
+
+function goNext(){
+  var n = S.deck.length;
+  if(!n) return;
+  S.flipped = false;
+  document.getElementById("card").classList.remove("flip");
+  S.i = (S.i + 1) % n;
+  saveData();
+  renderCard();
+  refreshStats();
+}
+function goPrev(){
+  var n = S.deck.length;
+  if(!n) return;
+  S.flipped = false;
+  document.getElementById("card").classList.remove("flip");
+  S.i = (S.i - 1 + n) % n;
+  saveData();
+  renderCard();
+  refreshStats();
+}
+function flipCard(){
+  S.flipped = !S.flipped;
+  document.getElementById("card").classList.toggle("flip", S.flipped);
+}
+
+/* =========================================================
+   TABS
+   ========================================================= */
+function buildTabs(){
+  var tabs = document.getElementById("tabs");
+  tabs.innerHTML = "";
+  SECTIONS.forEach(function(sec){
+    var b = document.createElement("button");
+    b.className = "tab";
+    b.type = "button";
+    b.setAttribute("data-sec", sec.id);
+    b.innerHTML = "<span>" + sec.emoji + "</span><span>" + sec.title + "</span>";
+    b.onclick = function(){
+      if(S.sec === sec.id) return;
+      S.sec = sec.id;
+      S.filter = "all";
+      S.i = 0;
+      S.shuffled = false;
+      S.flipped = false;
+      lastShownAbs = null;
+      document.getElementById("card").classList.remove("flip");
+      document.getElementById("app").setAttribute("data-s", sec.id);
+      document.getElementById("logo").textContent = sec.emoji;
+      buildDeck();
+      rebuildSidebar();
+      paintTabs();
+      renderCard();
+      refreshStats();
+      saveData();
+    };
+    tabs.appendChild(b);
+  });
+}
+function paintTabs(){
+  var kids = document.getElementById("tabs").children;
+  for(var i = 0; i < kids.length; i++){
+    kids[i].setAttribute("aria-selected", kids[i].getAttribute("data-sec") === S.sec ? "true" : "false");
+  }
+}
+
+/* =========================================================
+   DRAWER
+   ========================================================= */
+function openDrawer(){
+  document.getElementById("side").classList.add("open");
+  document.getElementById("bd").classList.add("on");
+}
+function closeDrawer(){
+  document.getElementById("side").classList.remove("open");
+  document.getElementById("bd").classList.remove("on");
+}
+
+/* =========================================================
+   WIRE UP
+   ========================================================= */
+function wire(){
+  document.getElementById("gotBtn").onclick = markKnown;
+  document.getElementById("revBtn").onclick = markReview;
+  document.getElementById("next").onclick = goNext;
+  document.getElementById("prev").onclick = goPrev;
+  document.getElementById("flip").onclick = flipCard;
+  document.getElementById("card").onclick = flipCard;
+
+  document.getElementById("shuf").onclick = function(){
+    S.shuffled = !S.shuffled;
+    document.getElementById("shuf").textContent = S.shuffled ? "Shuffled ✓" : "Shuffle";
+    S.i = 0;
+    S.flipped = false;
+    document.getElementById("card").classList.remove("flip");
+    buildDeck();
+    renderCard();
+    refreshStats();
+    saveData();
+  };
+
+  /* Reset — two-tap, no browser dialog, visible feedback */
+  (function(){
+    var resetEl = document.getElementById("reset");
+    var armedAt = 0;
+    var labelTimer = 0;
+
+    function flash(msg, bg, border, colour, ms){
+      clearTimeout(labelTimer);
+      resetEl.textContent = msg;
+      resetEl.style.background = bg;
+      resetEl.style.borderColor = border;
+      resetEl.style.color = colour;
+      labelTimer = setTimeout(function(){
+        resetEl.textContent = "↺ Reset";
+        resetEl.style.background = "";
+        resetEl.style.borderColor = "";
+        resetEl.style.color = "";
+      }, ms || 1500);
+    }
+
+    resetEl.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+
+      var now = Date.now();
+
+      if(now - armedAt < 3000){
+        armedAt = 0;
+        STATUS = {};
+        S.i = 0;
+        saveData();
+        buildDeck();
+        rebuildSidebar();
+        renderCard();
+        refreshStats();
+        flash("✓ Reset!", "rgba(34,197,94,.25)", "#22c55e", "#86efac", 1200);
+      } else {
+        armedAt = now;
+        flash("Tap again to confirm", "rgba(244,114,182,.2)", "#f472b6", "#f9a8d4", 3000);
+      }
+    });
+  })();
+
+  document.getElementById("clearData").onclick = function(){
+    if(!window.confirm("Clear ALL saved data and reload?")) return;
+    try { window.localStorage.removeItem(STORE); } catch(e){}
+    location.reload();
+  };
+
+  document.getElementById("menuBtn").onclick = openDrawer;
+  document.getElementById("closeBtn").onclick = closeDrawer;
+  document.getElementById("bd").onclick = closeDrawer;
+
+  document.addEventListener("keydown", function(e){
+    var tag = e.target.tagName;
+    if(tag === "INPUT" || tag === "TEXTAREA") return;
+    if(e.key === " " || e.key === "Enter"){
+      if(tag === "BUTTON") return;
+      e.preventDefault(); flipCard();
+    } else if(e.key === "ArrowRight" || e.key === "ArrowDown"){
+      e.preventDefault(); goNext();
+    } else if(e.key === "ArrowLeft" || e.key === "ArrowUp"){
+      e.preventDefault(); goPrev();
+    } else if(e.key === "1"){ e.preventDefault(); markReview(); }
+      else if(e.key === "2"){ e.preventDefault(); markKnown(); }
+      else if(e.key === "Escape"){ closeDrawer(); }
+  });
+
+  var tx = 0, ty = 0, tracking = false;
+  document.getElementById("cardwrap").addEventListener("touchstart", function(e){
+    if(e.touches.length !== 1) return;
+    tx = e.touches[0].clientX;
+    ty = e.touches[0].clientY;
+    tracking = true;
+  }, {passive:true});
+  document.getElementById("cardwrap").addEventListener("touchend", function(e){
+    if(!tracking) return;
+    tracking = false;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - tx;
+    var dy = t.clientY - ty;
+    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0) goNext(); else goPrev();
+    }
+  }, {passive:true});
+}
+
+/* =========================================================
+   BOOT
+   ========================================================= */
+loadData();
+document.getElementById("app").setAttribute("data-s", S.sec);
+document.getElementById("logo").textContent = SEC[S.sec].emoji;
+buildTabs();
+paintTabs();
+buildDeck();
+rebuildSidebar();
+wire();
+renderCard();
+refreshStats();
+</script>
+</body>
+</html>
